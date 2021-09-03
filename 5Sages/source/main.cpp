@@ -1,61 +1,79 @@
 #include <thread>
 #include <iostream>
 #include <chrono>
-#include <mutex>
-#include <random>
 
-std::mutex my_mutex;
+#include "sage.hpp"
 
-//unsigned int sageNumber;
-unsigned int minEatTime, maxEatTime;
-unsigned int minThinkTime, maxThinkTime;
+std::mutex one;
+std::mutex two;
+std::mutex three;
+std::mutex four;
+std::mutex five;
 
-struct PHILO {
-	bool isThinking = true;
-	bool isStarving = false;
-	bool isEating = false;
-	bool isDoneEating = false;
+void Sage::eat()
+{
+	auto start = std::chrono::steady_clock::now();
 
-	unsigned int eatTime = rand() % ((maxEatTime - minEatTime) + 1) + minEatTime;
-	unsigned int thinkTime = rand() % ((maxThinkTime - minThinkTime) + 1) + minThinkTime;
+	std::cout << m_name << " is thinking\n" << std::endl;
 
-	unsigned int chopstick1, chopstick2;
-};
+	std::this_thread::sleep_for(std::chrono::seconds(m_thinkTime));
 
+	m_state = State::STARVE;
+
+	while (m_state == State::STARVE)
+	{
+		if (m_chopstick1->try_lock()) // if can lock
+		{
+			if (m_chopstick2->try_lock())
+			{
+				m_state = State::EAT;
+				std::cout << m_name << " is eating\n" << std::endl;
+				std::this_thread::sleep_for(std::chrono::seconds(m_eatTime));
+				m_chopstick2->unlock();
+			}
+
+			m_chopstick1->unlock();
+		}
+		else
+		{
+			m_state = State::STARVE;
+			std::cout << m_name << " is starving\n" << std::endl;
+		}
+	}
+
+	std::cout << m_name << " puts down his chopsticks\n" << std::endl;
+
+	auto end = std::chrono::steady_clock::now();
+}
 
 using namespace std;
 int main()
 {
-	PHILO platon, descartes, voltaire, socrate, heraclite;
+	Sage platon, descartes, voltaire, socrate, heraclite;
 
-	platon.chopstick1 = 5, platon.chopstick2 = 1;
-	descartes.chopstick1 = 1, descartes.chopstick2 = 2;
-	voltaire.chopstick1 = 2, voltaire.chopstick2 = 3;
-	socrate.chopstick1 = 3, socrate.chopstick2 = 4;
-	heraclite.chopstick1 = 4, heraclite.chopstick2 = 5;
+	platon.m_chopstick1 = &five, platon.m_chopstick2 = &one;
+	descartes.m_chopstick1 = &one, descartes.m_chopstick2 = &two;
+	voltaire.m_chopstick1 = &two, voltaire.m_chopstick2 = &three;
+	socrate.m_chopstick1 = &three, socrate.m_chopstick2 = &four;
+	heraclite.m_chopstick1 = &four, heraclite.m_chopstick2 = &five;
 
+	platon.m_name = "Platon";
+	descartes.m_name = "Descartes";
+	voltaire.m_name = "Voltaire";
+	socrate.m_name = "Socrate";
+	heraclite.m_name = "Heraclite";
 
-	//std::cout << "Enter number of sage : ";
-	//std::cin >> sageNumber;
+	platon.trd = thread{&Sage::eat, &platon};
+	descartes.trd = thread{&Sage::eat, &descartes};
+	voltaire.trd = thread{&Sage::eat, &voltaire};
+	socrate.trd = thread{&Sage::eat, &socrate};
+	heraclite.trd = thread{&Sage::eat, &heraclite};
 
-	std::cout << "Enter minimum eat time : ";
-	std::cin >> minEatTime;
-	std::cout << "Enter maximum eat time : ";
-	std::cin >> maxEatTime;
-
-	std::cout << "Enter minimum think time : ";
-	std::cin >> minThinkTime;
-	std::cout << "Enter maximum think time : ";
-	std::cin >> maxThinkTime;
-
-	//for (int i = 0; i < sageNumber; ++i)
-	//{
-		thread t1 {};
-		thread t2 {};
-		thread t3 {};
-		thread t4 {};
-		thread t5 {};
-	//}
+	platon.trd.join();
+	descartes.trd.join();
+	voltaire.trd.join();
+	socrate.trd.join();
+	heraclite.trd.join();
 
 	return 0;
 }
