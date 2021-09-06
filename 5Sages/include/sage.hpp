@@ -4,9 +4,6 @@
 #include <mutex>
 #include <vector>
 
-std::default_random_engine rng;
-std::uniform_int_distribution<int> uni(1, 5);
-
 enum class State
 {
 	THINK,
@@ -21,8 +18,8 @@ class Sage
 
 		State m_state = State::THINK;
 
-		int m_thinkTime = uni(rng);
-		int m_eatTime = uni(rng);
+		int m_thinkTime = 0;
+		int m_eatTime = 0;
 
 		std::mutex* m_chopstick1{};
 		std::mutex* m_chopstick2{};
@@ -31,8 +28,9 @@ class Sage
 
 		void eat();
 
-		Sage() {};
-		//~Sage();
+		Sage() {}
+		Sage(int think, int eat);
+		//~Sage() {}
 };
 
 class Array

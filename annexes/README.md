@@ -4,7 +4,7 @@
 
 - [Description](##Description)
 - [Informations](##Informations)
-- [Work in progress and future features](##Work%20in%%20and%20future%20features)
+- [Work in progress](##Work%20in%20progress)
 - [References](##References)
 
 ## **Description**
@@ -20,16 +20,12 @@ In the zip file "GP2_MEHALIN_M" on sirius you can find :
 - the README file
 - the bin folder which contains "5Sages.exe" to launch the program
 
-## **Work in progress and future features**
+The program works only with 5 sages for the moment.
 
-WIP
----
-- 
+## **Work in progress**
 
-Next features
----
-- 
-- 
+- programmable variables without recompiling the code
+- better display in the console
 
 ## **References**
 
@@ -38,6 +34,12 @@ C++:
 - C++ references: https://en.cppreference.com/
 - Thread: http://www.cplusplus.com/reference/thread/thread/
 - Mutex: http://www.cplusplus.com/reference/mutex/
+
+Change text color in console:
+---
+- https://stackoverflow.com/questions/4053837/colorizing-text-in-the-console-with-c
+- https://stackoverflow.com/questions/8621578/do-windows-console-color-values-have-official-names-constants-associated-with/49929936#49929936
+- https://stackoverflow.com/questions/17125440/c-win32-console-color/17125539
 
 Stack Overflow:
 ---
