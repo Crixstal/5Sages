@@ -1,6 +1,8 @@
 #include <thread>
 #include <iostream>
 #include <chrono>
+#include <windows.h>
+#include <memory>
 
 #include "sage.hpp"
 
@@ -10,38 +12,71 @@ std::mutex three;
 std::mutex four;
 std::mutex five;
 
+std::mutex sentence;
+
 void Sage::eat()
 {
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
 	auto start = std::chrono::steady_clock::now();
 
+	sentence.lock();
 	std::cout << m_name << " is thinking\n" << std::endl;
+	sentence.unlock();
 
 	std::this_thread::sleep_for(std::chrono::seconds(m_thinkTime));
 
-	m_state = State::STARVE;
+	int maxEat = 0;
+	int eatCounter = 0;
 
-	while (m_state == State::STARVE)
+	while (maxEat <= 5)
 	{
 		if (m_chopstick1->try_lock()) // if can lock
 		{
 			if (m_chopstick2->try_lock())
 			{
 				m_state = State::EAT;
-				std::cout << m_name << " is eating\n" << std::endl;
+
+				sentence.lock();
+				std::cout << m_name << " is eating during " << m_eatTime << " seconds\n" << std::endl;
+				sentence.unlock();
+
 				std::this_thread::sleep_for(std::chrono::seconds(m_eatTime));
 				m_chopstick2->unlock();
+
+				maxEat += m_eatTime;
 			}
 
 			m_chopstick1->unlock();
 		}
 		else
 		{
-			m_state = State::STARVE;
-			std::cout << m_name << " is starving\n" << std::endl;
+			if (m_state == State::STARVE)
+				continue;
+			else
+			{
+				m_state = State::STARVE;
+
+				sentence.lock();
+				std::cout << m_name << " is starving\n" << std::endl;
+				sentence.unlock();
+			}
 		}
 	}
 
+	sentence.lock();
 	std::cout << m_name << " puts down his chopsticks\n" << std::endl;
+	sentence.unlock();
+
+	if (maxEat >= 5)
+	{
+		sentence.lock();
+		SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN); // light green text
+		std::cout << m_name << " finished his plate\n" << std::endl;
+		sentence.unlock();
+
+		SetConsoleTextAttribute(hConsole, 7); //white text (default)
+	}
 
 	auto end = std::chrono::steady_clock::now();
 }
@@ -49,7 +84,37 @@ void Sage::eat()
 using namespace std;
 int main()
 {
-	Sage platon, descartes, voltaire, socrate, heraclite;
+	Array sage;
+	
+	int nextIndex = 0;
+
+	std::cout << "How many sages dine around the table ?" << std::endl;
+	std::cin >> sage.totalSage;
+
+	for (int i = 0; i < sage.totalSage; i++)
+	{
+		//nextIndex = i + 1;
+		//if (i == sage.totalSage - 1)
+		//	nextIndex = 0;
+
+		//sage.sageArray.push_back({ uni(rng), uni(rng), i, nextIndex }); //thinkTime, eatime, stick, nextStick
+		//sticks.push_back(std::unique_ptr<std::mutex>(new std::mutex));
+		std::cout << "Name of the sage number " << i + 1 << " ?" << std::endl;
+		std::cin >> sage.sageArray[i].m_name;
+	}
+
+	for (int i = 0; i < sage.totalSage; ++i)
+		std::cout << sage.sageArray[i].m_name << std::endl;
+
+	//for (int i = 0; i < sage.totalSage; i++)
+	//	sage.sageArray[i].trd = std::thread{ &Sage::eat, &sage.sageArray[i] };
+	//
+	//for (int i = 0; i < sage.totalSage; i++)
+	//	sage.sageArray[i].trd.join();
+
+	/*Sage platon, descartes, voltaire, socrate, heraclite;
+
+	// chopstick1 is on their right, chopstick2 on their left
 
 	platon.m_chopstick1 = &five, platon.m_chopstick2 = &one;
 	descartes.m_chopstick1 = &one, descartes.m_chopstick2 = &two;
@@ -73,7 +138,7 @@ int main()
 	descartes.trd.join();
 	voltaire.trd.join();
 	socrate.trd.join();
-	heraclite.trd.join();
+	heraclite.trd.join();*/
 
 	return 0;
 }
