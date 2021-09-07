@@ -1,10 +1,11 @@
-# **Multithread by Manon MÉHALIN**
+# **5 Sages by Manon MÉHALIN**
 
 ## **Summary**
 
 - [Description](##Description)
 - [Informations](##Informations)
 - [Work in progress](##Work%20in%20progress)
+- [Known issues](##Known%20issues)
 - [References](##References)
 
 ## **Description**
@@ -15,17 +16,21 @@ The project objective is to write a multithreaded program that will solve the ri
 
 ## **Informations**
 
-The program runs in Debug or Release, platform x64.
+The program runs in Debug or Release, platform x64.  
 In the zip file "GP2_MEHALIN_M" on sirius you can find :
 - the README file
-- the bin folder which contains "5Sages.exe" to launch the program
-
-The program works only with 5 sages for the moment.
+- "table.png" to see the sages layout
+- the bin folder which contains "5Sages.exe" (Release) to launch the program
 
 ## **Work in progress**
 
 - programmable variables without recompiling the code
 - better display in the console
+- specific text color and white background per sage name (see `void printName()`)
+
+## **Known issues**
+
+The program only works with 5 sages.
 
 ## **References**
 
