@@ -18,10 +18,7 @@ The project objective is to write a multithreaded program that will solve the ri
 ## **Informations**
 
 The program runs in Debug or Release, platform x64.  
-In the zip file "GP2_MEHALIN_M" on sirius you can find :
-- the README file
-- "table.png" to see the sages layout
-- the bin folder which contains "5Sages.exe" (Release) to launch the program
+The .exe file can be found under the GOLD release.
 
 <br>
 
