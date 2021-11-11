@@ -13,8 +13,6 @@
 
 The project objective is to write a multithreaded program that will solve the riddle of the 5 wise men's dinner.
 
-![Table](table.png "Sages layout")
-
 <br>
 
 ## **Informations**
