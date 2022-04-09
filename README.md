@@ -2,10 +2,10 @@
 
 ## **Summary**
 
-- [Description](##Description)
-- [Informations](##Informations)
-- [Known issues](##Known%20issues)
-- [References](##References)
+- [Description](#Description)
+- [Informations](#Informations)
+- [Known issues](#Known%20issues)
+- [References](#References)
 
 <br>
 
@@ -49,3 +49,7 @@ Stack Overflow:
 - https://stackoverflow.com/questions/5008804/generating-random-integer-from-a-range/19728404#19728404
 
 - https://stackoverflow.com/questions/14391327/how-to-get-duration-as-int-millis-and-float-seconds-from-chrono
+
+<br>
+
+[Head of page](#Summary)
