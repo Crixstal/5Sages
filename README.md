@@ -2,16 +2,9 @@
 
 ## **Summary**
 
-- [Description](#Description)
 - [Informations](#Informations)
 - [Known issues](#Known%20issues)
 - [References](#References)
-
-<br>
-
-## **Description**
-
-The project objective is to write a multithreaded program that will solve the riddle of the 5 wise men's dinner.
 
 <br>
 
